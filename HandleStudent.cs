@@ -43,7 +43,7 @@ namespace Studentregistreringsprogram_Databas
             Console.WriteLine("Vilken information önskar du ändra?\nAnge1 för förnamn, 2 för efternamn eller 3 för stad");
             int choice = int.Parse(Console.ReadLine());
 
-            switch (choice)
+            switch (choice) // Menyval för val av information att ändra
             {
                 case 1:
                     Console.WriteLine("Ange nytt förnamn: ");
@@ -62,7 +62,7 @@ namespace Studentregistreringsprogram_Databas
                     break;
             }
             dbContext.SaveChanges();
-            Console.WriteLine("Ändringarna har sparat!\n\n");
+            Console.WriteLine("Ändringarna har sparats!\n\n");
             Menu.PrintMenu(); // Återgå till huvudmenyn
         }
 

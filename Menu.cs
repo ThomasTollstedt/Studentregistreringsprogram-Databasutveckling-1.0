@@ -38,46 +38,41 @@ namespace Studentregistreringsprogram_Databas
                 Console.WriteLine("Välj ett alternativ");
 
 
-                while (!int.TryParse(Console.ReadLine(), out menuSelection))
+                while (!int.TryParse(Console.ReadLine(), out menuSelection)) //Hantera ev felaktig input från user
                 {
                     Console.WriteLine("Ogiltligt val, försök igen.");
                     Console.WriteLine("Välj ett alternativ");
                 }
 
-
-
-                switch (menuSelection)
+                switch (menuSelection) //Menyval
                 {
                     case 1:
-                        HandleStudent.CreateStudent();
+                        HandleStudent.CreateStudent(); //Anropa metod för att skapa student
                         break;
                     case 2:
-                        HandleStudent.ChangeStudent();
+                        HandleStudent.ChangeStudent(); //Anropa metod för att ändra student
                         break;
                     case 3:
-                        HandleStudent.ListStudents();
+                        HandleStudent.ListStudents(); //Anropa metod för att lista studenter
                         break;
                     case 4:
-                        Console.WriteLine("Programmet avslutas.");
+                        Console.WriteLine("Programmet avslutas."); //Avsluta programmet
                         return; //Avslutar programmet
-                    default:
+                    default: //Felaktig input
                         Console.WriteLine(invalidInput);
-                        PrintMenu();
+                        PrintMenu(); //Återgå till huvudmenyn
                         break;
                 }
 
                 Console.WriteLine("Säker att du vill avsluta programmet?\nJ/N"); //Läggas på annat håll för att inte välja avsluta och därefter behöva input J/N för att avsluta igen?
-                answer = Console.ReadLine().ToLower();
+                answer = Console.ReadLine().ToLower(); // Input från user, konverterat till lowercase för att minska risk för felaktig input
                 if (answer != "n")
                 {
                     break;
                 }
-            } while (answer == "n");
+            } while (answer == "n"); // Om user input är n, återgå till huvudmenyn
+
             
-                if (answer == "n")
-                {
-                    PrintMenu();
-                }
             
            
 
