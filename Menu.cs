@@ -48,21 +48,21 @@ namespace Studentregistreringsprogram_Databas
                 switch (menuSelection) //Menyval
                 {
                     case 1:
-                        handleStudent.CreateStudent(loggedInUser); //Anropa metod för att skapa student
-                        break;
-                    case 2:
                         if (loggedInUser.UserRole.RoleName == "Admin")
                         {
                             Console.WriteLine("Behörig!");
                             Thread.Sleep(2000);
-                            handleStudent.ChangeStudent(loggedInUser); //Anropa metod för att ändra student
+                            handleStudent.CreateStudent(loggedInUser); //Anropa metod för att skapa student
 
                         }
                         else
                         {
                             Console.WriteLine("Du har inte behörighet till denna funktion");
-                        }
-
+                       }
+                           
+                        break;
+                    case 2:                        
+                            handleStudent.ChangeStudent(loggedInUser); //Anropa metod för att ändra student
                         break;
                     case 3:
                         handleStudent.ListStudents(loggedInUser); //Anropa metod för att lista studenter
