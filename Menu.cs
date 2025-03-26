@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Quic;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,7 +16,7 @@ namespace Studentregistreringsprogram_Databas
         const string listStudents = "3.Lista samtliga studenter";
         const string exitProgram = "4.Avsluta programmet";
         const string invalidInput = "Felaktig inmatning, försök igen";
-        public static void PrintMenu()
+        public static void PrintMenu(HandleStudent handleStudent)
         {
 
             Console.WriteLine($"{welcome}");
@@ -25,10 +26,10 @@ namespace Studentregistreringsprogram_Databas
             Console.WriteLine($"{listStudents}");
             Console.WriteLine($"{exitProgram}");
 
-            MenuInput();
+            MenuInput(handleStudent);
         }
 
-        public static void MenuInput()
+        private static void MenuInput(HandleStudent handleStudent)
         {
             string answer;
 
@@ -47,35 +48,54 @@ namespace Studentregistreringsprogram_Databas
                 switch (menuSelection) //Menyval
                 {
                     case 1:
-                        HandleStudent.CreateStudent(); //Anropa metod för att skapa student
+                        handleStudent.CreateStudent(); //Anropa metod för att skapa student
                         break;
                     case 2:
-                        HandleStudent.ChangeStudent(); //Anropa metod för att ändra student
+                        handleStudent.ChangeStudent(); //Anropa metod för att ändra student
                         break;
                     case 3:
-                        HandleStudent.ListStudents(); //Anropa metod för att lista studenter
+                        handleStudent.ListStudents(); //Anropa metod för att lista studenter
                         break;
                     case 4:
-                        Console.WriteLine("Programmet avslutas."); //Avsluta programmet
-                        return; //Avslutar programmet
+                        Console.WriteLine("Säker att du vill avsluta programmet?\nJ/N");
+
+                        if (Console.ReadLine().ToLower() == "n")
+                        {
+                            PrintMenu(handleStudent);
+                        }
+                        else
+                        {
+                            return;
+                        }
+                        break;
                     default: //Felaktig input
                         Console.WriteLine(invalidInput);
-                        PrintMenu(); //Återgå till huvudmenyn
                         break;
                 }
 
-                Console.WriteLine("Säker att du vill avsluta programmet?\nJ/N"); //Läggas på annat håll för att inte välja avsluta och därefter behöva input J/N för att avsluta igen?
-                answer = Console.ReadLine().ToLower(); // Input från user, konverterat till lowercase för att minska risk för felaktig input
-                if (answer != "n")
+                if (menuSelection != 4)
                 {
-                    break;
+                    Console.WriteLine("Vill du fortsätta? (J/N)");
+                    answer = Console.ReadLine().ToLower();
+
                 }
-            } while (answer == "n"); // Om user input är n, återgå till huvudmenyn
+                else
+                {
+                    answer = "n";
 
-            
-            
-           
-
+                }
+            } while (answer == "J");
         }
+
+
+
+
+
+
+
+
+
     }
 }
+
+

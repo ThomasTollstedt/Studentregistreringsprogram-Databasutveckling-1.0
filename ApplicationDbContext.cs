@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Studentregistreringsprogram_Databas
 {
-    class ApplicationDbContext:DbContext
+   public class ApplicationDbContext:DbContext
     {
         private string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=StudentDatabase;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
 

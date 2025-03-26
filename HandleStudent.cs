@@ -7,13 +7,18 @@ using System.Threading.Tasks;
 
 namespace Studentregistreringsprogram_Databas
 {
-    class HandleStudent
+    public class HandleStudent
     {
+        private readonly ApplicationDbContext _dbContext;
 
-        public static void CreateStudent() // Skapa en student genom user input och lägg till i databasen
+        public HandleStudent(ApplicationDbContext dbContext)
+        {
+            _dbContext = dbContext;
+
+        }
+        public void CreateStudent() // Skapa en student genom user input och lägg till i databasen
         {
             Console.Clear();
-            var dbContext = new ApplicationDbContext();
             var student = new Student();
             Console.WriteLine("Ange förnamn: ");
             student.FirstName = Console.ReadLine();
@@ -21,19 +26,19 @@ namespace Studentregistreringsprogram_Databas
             student.LastName = Console.ReadLine();
             Console.WriteLine("Ange stad: ");
             student.City = Console.ReadLine();
-            dbContext.Add(student);
-            dbContext.SaveChanges();
+            _dbContext.Add(student);
+            _dbContext.SaveChanges();
             Console.WriteLine("Student inlagd i databas!");
 
-            Menu.PrintMenu(); // Återgå till huvudmenyn
+            Menu.PrintMenu(this); 
         }
 
-        public static void ChangeStudent() // Ändra en students information genom user input och uppdatera i databasen
+        public void ChangeStudent() // Ändra en students information genom user input och uppdatera i databasen
         {
             Console.Clear();
             Console.WriteLine("Vilken student önskar du ändra informationen kring?\n Ange förnamn och därefter efternamn");
-            var dbContext = new ApplicationDbContext(); // Skapa en ny instans av databasen
-            var std = dbContext.Students.Where(s => s.FirstName == Console.ReadLine() && s.LastName == Console.ReadLine()).FirstOrDefault<Student>(); // Hitta studenten i databasen
+            
+            var std = _dbContext.Students.Where(s => s.FirstName == Console.ReadLine() && s.LastName == Console.ReadLine()).FirstOrDefault<Student>(); // Hitta studenten i databasen
 
             if (std == null) // Om studenten inte hittas i databasen
             {
@@ -41,7 +46,13 @@ namespace Studentregistreringsprogram_Databas
                 return;
             }
             Console.WriteLine("Vilken information önskar du ändra?\nAnge1 för förnamn, 2 för efternamn eller 3 för stad");
-            int choice = int.Parse(Console.ReadLine());
+           
+            if (!int.TryParse(Console.ReadLine(), out int choice))
+            {
+                Console.WriteLine("Felaktig inmatning, försök igen");
+                return;
+            }
+            
 
             switch (choice) // Menyval för val av information att ändra
             {
@@ -61,33 +72,27 @@ namespace Studentregistreringsprogram_Databas
                     Console.WriteLine("Felaktig inmatning, försök igen.");
                     break;
             }
-            dbContext.SaveChanges();
+            _dbContext.SaveChanges();
             Console.WriteLine("Ändringarna har sparats!\n\n");
-            Menu.PrintMenu(); // Återgå till huvudmenyn
+            Menu.PrintMenu(this); // Återgå till huvudmenyn
         }
 
-        public static void ListStudents() // Lista samtliga studenter i databasen
+        public void ListStudents() // Lista samtliga studenter i databasen
         {
-            Console.Clear();
-            var dbContext = new ApplicationDbContext();
-
-
+            Console.Clear();         
             Console.WriteLine("Följande studenter är registrerade");
             Console.WriteLine();
-            foreach (var item in dbContext.Students.OrderBy(s => s.FirstName)) // Loopa igenom samtliga studenter i databasen och skriv ut
+            foreach (var item in _dbContext.Students.OrderBy(s => s.FirstName)) // Loopa igenom samtliga studenter i databasen och skriv ut
             {
-                
                 Console.WriteLine($"{item.FirstName}, {item.LastName} , {item.City}"); // Skriv ut studentens förnamn, efternamn och stad
-
             }
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine("Slut på studenter i listan");
             Console.WriteLine();
             Console.WriteLine();
-            
-            Menu.PrintMenu(); // Återgå till huvudmenyn
-           
+            Menu.PrintMenu(this); // Återgå till huvudmenyn
+
         }
     }
 }

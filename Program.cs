@@ -1,13 +1,16 @@
 ﻿namespace Studentregistreringsprogram_Databas
 {
-    internal class Program
+    public class Program
     {
         static void Main(string[] args)
         {
-            var dbCtx = new ApplicationDbContext(); // Create a new instance of the ApplicationDbContext class
-
-           Menu.PrintMenu(); // Call the PrintMenu method from the Menu class
-            dbCtx.SaveChanges();
+            using (var dbCtx = new ApplicationDbContext())
+            {
+                var handleStudent = new HandleStudent(dbCtx);
+                Menu.PrintMenu(handleStudent); // Call the PrintMenu method from the Menu class
+                dbCtx.SaveChanges();
+            }
+            ;
         }
     }
 }
