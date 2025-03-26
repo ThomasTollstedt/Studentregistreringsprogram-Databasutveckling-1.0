@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Studentregistreringsprogram_Databas;
 
@@ -10,9 +11,11 @@ using Studentregistreringsprogram_Databas;
 namespace Studentregistreringsprogram_Databas.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250326115508_add admin user 1")]
+    partial class addadminuser1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,20 +54,19 @@ namespace Studentregistreringsprogram_Databas.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SystemUserId"));
 
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Password")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserRoleId")
+                    b.Property<int>("UserRoleIdRoleId")
                         .HasColumnType("int");
 
                     b.HasKey("SystemUserId");
 
-                    b.HasIndex("UserRoleId");
+                    b.HasIndex("UserRoleIdRoleId");
 
                     b.ToTable("SystemUsers");
                 });
@@ -88,13 +90,13 @@ namespace Studentregistreringsprogram_Databas.Migrations
 
             modelBuilder.Entity("Studentregistreringsprogram_Databas.SystemUser", b =>
                 {
-                    b.HasOne("Studentregistreringsprogram_Databas.UserRole", "UserRole")
+                    b.HasOne("Studentregistreringsprogram_Databas.UserRole", "UserRoleId")
                         .WithMany()
-                        .HasForeignKey("UserRoleId")
+                        .HasForeignKey("UserRoleIdRoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("UserRole");
+                    b.Navigation("UserRoleId");
                 });
 #pragma warning restore 612, 618
         }

@@ -16,7 +16,7 @@ namespace Studentregistreringsprogram_Databas
             _dbContext = dbContext;
 
         }
-        public void CreateStudent() // Skapa en student genom user input och lägg till i databasen
+        public void CreateStudent(SystemUser loggedInUser) // Skapa en student genom user input och lägg till i databasen
         {
             Console.Clear();
             var student = new Student();
@@ -30,14 +30,14 @@ namespace Studentregistreringsprogram_Databas
             _dbContext.SaveChanges();
             Console.WriteLine("Student inlagd i databas!");
 
-            Menu.PrintMenu(this); 
+            Menu.PrintMenu(this, loggedInUser);
         }
 
-        public void ChangeStudent() // Ändra en students information genom user input och uppdatera i databasen
+        public void ChangeStudent(SystemUser loggedInUser) // Ändra en students information genom user input och uppdatera i databasen
         {
             Console.Clear();
             Console.WriteLine("Vilken student önskar du ändra informationen kring?\n Ange förnamn och därefter efternamn");
-            
+
             var std = _dbContext.Students.Where(s => s.FirstName == Console.ReadLine() && s.LastName == Console.ReadLine()).FirstOrDefault<Student>(); // Hitta studenten i databasen
 
             if (std == null) // Om studenten inte hittas i databasen
@@ -46,13 +46,13 @@ namespace Studentregistreringsprogram_Databas
                 return;
             }
             Console.WriteLine("Vilken information önskar du ändra?\nAnge1 för förnamn, 2 för efternamn eller 3 för stad");
-           
+
             if (!int.TryParse(Console.ReadLine(), out int choice))
             {
                 Console.WriteLine("Felaktig inmatning, försök igen");
                 return;
             }
-            
+
 
             switch (choice) // Menyval för val av information att ändra
             {
@@ -74,12 +74,12 @@ namespace Studentregistreringsprogram_Databas
             }
             _dbContext.SaveChanges();
             Console.WriteLine("Ändringarna har sparats!\n\n");
-            Menu.PrintMenu(this); // Återgå till huvudmenyn
+            Menu.PrintMenu(this, loggedInUser); // Återgå till huvudmenyn
         }
 
-        public void ListStudents() // Lista samtliga studenter i databasen
+        public void ListStudents(SystemUser loggedInUser) // Lista samtliga studenter i databasen
         {
-            Console.Clear();         
+            Console.Clear();
             Console.WriteLine("Följande studenter är registrerade");
             Console.WriteLine();
             foreach (var item in _dbContext.Students.OrderBy(s => s.FirstName)) // Loopa igenom samtliga studenter i databasen och skriv ut
@@ -91,7 +91,7 @@ namespace Studentregistreringsprogram_Databas
             Console.WriteLine("Slut på studenter i listan");
             Console.WriteLine();
             Console.WriteLine();
-            Menu.PrintMenu(this); // Återgå till huvudmenyn
+            Menu.PrintMenu(this, loggedInUser); // Återgå till huvudmenyn
 
         }
     }

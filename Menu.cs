@@ -16,7 +16,7 @@ namespace Studentregistreringsprogram_Databas
         const string listStudents = "3.Lista samtliga studenter";
         const string exitProgram = "4.Avsluta programmet";
         const string invalidInput = "Felaktig inmatning, försök igen";
-        public static void PrintMenu(HandleStudent handleStudent)
+        public static void PrintMenu(HandleStudent handleStudent, SystemUser loggedInUser)
         {
 
             Console.WriteLine($"{welcome}");
@@ -26,10 +26,10 @@ namespace Studentregistreringsprogram_Databas
             Console.WriteLine($"{listStudents}");
             Console.WriteLine($"{exitProgram}");
 
-            MenuInput(handleStudent);
+            MenuInput(handleStudent, loggedInUser);
         }
 
-        private static void MenuInput(HandleStudent handleStudent)
+        private static void MenuInput(HandleStudent handleStudent, SystemUser loggedInUser)
         {
             string answer;
 
@@ -48,20 +48,31 @@ namespace Studentregistreringsprogram_Databas
                 switch (menuSelection) //Menyval
                 {
                     case 1:
-                        handleStudent.CreateStudent(); //Anropa metod för att skapa student
+                        handleStudent.CreateStudent(loggedInUser); //Anropa metod för att skapa student
                         break;
                     case 2:
-                        handleStudent.ChangeStudent(); //Anropa metod för att ändra student
+                        if (loggedInUser.UserRole.RoleName == "Admin")
+                        {
+                            Console.WriteLine("Behörig!");
+                            Thread.Sleep(2000);
+                            handleStudent.ChangeStudent(loggedInUser); //Anropa metod för att ändra student
+
+                        }
+                        else
+                        {
+                            Console.WriteLine("Du har inte behörighet till denna funktion");
+                        }
+
                         break;
                     case 3:
-                        handleStudent.ListStudents(); //Anropa metod för att lista studenter
+                        handleStudent.ListStudents(loggedInUser); //Anropa metod för att lista studenter
                         break;
                     case 4:
                         Console.WriteLine("Säker att du vill avsluta programmet?\nJ/N");
 
                         if (Console.ReadLine().ToLower() == "n")
                         {
-                            PrintMenu(handleStudent);
+                            PrintMenu(handleStudent, loggedInUser);
                         }
                         else
                         {
@@ -86,15 +97,6 @@ namespace Studentregistreringsprogram_Databas
                 }
             } while (answer == "J");
         }
-
-
-
-
-
-
-
-
-
     }
 }
 
